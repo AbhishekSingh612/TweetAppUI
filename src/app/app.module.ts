@@ -9,12 +9,20 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {appRoutes} from "./app.routes";
+import { ForgotPasswordPageComponent } from './forgot-password-page/forgot-password-page.component';
+import { ErrorPageComponent } from './error-page/error-page.component';
+import { TweetComponent } from './tweet/tweet.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    SignupPageComponent
+    SignupPageComponent,
+    ForgotPasswordPageComponent,
+    ErrorPageComponent,
+    TweetComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,

@@ -1,25 +1,45 @@
-<div *ngIf="isFailed"> Invalid Username or password</div>
+<div class="container-sm p-5 mx-820">
 
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" >
+  <div class="container-fluid text-center display-5 p-2 mb-3" >
+    Login
+  </div>
 
-  <label for="loginUsername">Username</label> <br>
-  <input type="text" name="loginUsername" id="loginUsername" formControlName="username" placeholder="Enter Username or email">
+  <div *ngIf="isFailed" class="alert alert-danger alert-dismissible fade show" role="alert">
+    Invalid username or password!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <label class="form-label" for="loginUsername">Username</label> <br>
+    <div class="input-group has-validation pb-4">
+      <input type="text" class="form-control"
+             [ngClass]="{'is-invalid' : loginForm.get('username')?.touched && !loginForm.get('username')?.valid}"
+             name="loginUsername" id="loginUsername" formControlName="username" placeholder="Enter Username or email">
+      <div class="invalid-feedback">
+        Please provide a username.
+      </div>
+    </div>
+
+    <label class="form-label" for="loginPassword">Password</label> <br>
+    <div class="input-group has-validation pb-4">
+      <input class="form-control" type="password" name="loginPassword" id="loginPassword" formControlName="password"
+             [ngClass]="{'is-invalid' : loginForm.controls['password'].touched && !loginForm.controls['password'].valid }"
+             placeholder="Enter password">
+      <div class="invalid-feedback">
+        Please provide Password.
+      </div>
+    </div>
+
+    <a [routerLink]="['../forgot-password']">Forgot Password?</a>
+
+    <div class="container-fluid text-center">
+      <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+
+    </div>
+
+  </form>
   <br>
-  <br>
-
-  <label for="loginPassword">Password</label> <br>
-  <input type="password" name="loginPassword" id="loginPassword" formControlName="password" placeholder="Enter password">
-
-  <br>
-  <br>
-
-  <button type="submit"  class="btn btn-primary"  [disabled]="!loginForm.valid" >Login</button>
-
-</form>
-<br>
-
-<button class="btn btn-primary m-1" (click)="checkLogin()" >Check</button>
 
 
-<button  class="btn btn-primary" (click)="logout()" >Logout</button>
+</div>

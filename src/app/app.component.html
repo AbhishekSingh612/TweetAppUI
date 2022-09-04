@@ -1,3 +1,26 @@
-<a [routerLink]="['login']">Login</a>
+<nav class="navbar navbar-expand-sm navbar-light nav-shadow">
+  <div class="container mx-975">
 
-<router-outlet></router-outlet>
+    <a class="navbar-brand" [routerLink]="['/']">
+      <span class="container-fluid">
+        <img src="/assets/logo-t2.png" alt="" height="29" width="97">
+      </span>
+    </a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['login']">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['register']">Register</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="container p-0 p-sm-1 justify-content-center">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+
+

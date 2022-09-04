@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LogService} from "../service/log.service";
 import {AuthService} from "../service/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-page',
@@ -12,7 +13,7 @@ export class LoginPageComponent implements OnInit {
   loginForm: FormGroup;
   isFailed: boolean;
 
-  constructor(private formBuilder: FormBuilder, private logger: LogService, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder, private logger: LogService, private authService: AuthService,private router: Router) {
 
     this.isFailed = false;
 
@@ -35,6 +36,7 @@ export class LoginPageComponent implements OnInit {
         (token) => {
           this.logger.log(token);
           this.isFailed = false;
+          this.router.navigate(['home']);
         },
         () => {
           this.logger.log("error in login");
