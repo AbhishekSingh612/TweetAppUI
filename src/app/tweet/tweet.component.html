@@ -1,4 +1,4 @@
-<div class="container-fluid card p-0 shadow mb-3">
+<div *ngIf="!isHidden" class="container-fluid card p-0 shadow mb-3">
 
   <!--Header starts-->
   <div class="d-flex justify-content-between p-2 px-3">
@@ -25,16 +25,17 @@
     <div class="d-flex flex-row mt-1 align-items-center ellipsis">
 
       <!--Time-->
-      <small class="flex-shrink-0 mr-2 text-muted " style="font-size:0.8rem;">20 mins</small>
+      <small class="flex-shrink-0 mr-2 text-muted " style="font-size:0.8rem;">{{tweet?.createdAt | timeConvert}}</small>
 
       <!--Options for own tweet-->
-      <div class="dropdown">
+      <div  class="dropdown">
         <button type="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"><i
           class="bi bi-three-dots-vertical"></i></button>
 
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editTweetModal">Edit</a></li>
-          <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteTweetModal">Delete</a></li>
+          <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editTweetModal">Edit</a></li>
+          <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteTweetModal">Delete</a></li>
+          <li><a class="dropdown-item" (click)="hideTweet()">Hide</a></li>
         </ul>
       </div>
 

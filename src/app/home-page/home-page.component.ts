@@ -1,5 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {TweetModel} from "../model/tweet.model";
+import {LogService} from "../service/log.service";
+import {ApiService} from "../service/api.service";
+import {AuthService} from "../service/auth.service";
+import {UserModel} from "../model/user.model";
 
 @Component({
   selector: 'app-home-page',
@@ -8,43 +12,32 @@ import {TweetModel} from "../model/tweet.model";
 })
 export class HomePageComponent implements OnInit {
 
-  tweetData: TweetModel;
+  tweetDataList: TweetModel[];
+  user: UserModel | undefined;
 
-  constructor() {
-
-    this.tweetData = {
-      author: {
-        userId: "llankurll",
-        firstName: "Abhishek",
-        lastName: "Singh",
-        email: "ankur@gmail.com",
-        contactNumber: "8171212908"
-      },
-      content: "This is a wider card with supporting text below as a natural lead-in to additional content.This content is a little bit longer. This is a wider card with supporting text below as a natural lead-in to.",
-      createdAt: new Date(),
-      likedBy:["user1", "user2", "user3", "user4"],
-      replies: [
-        {
-          id: "replyid002",
-          user: {
-            userId: "supperMan.Cr007",
-            firstName: "Ankur",
-            lastName: "Singh",
-            email: "ankur12@gmail.com",
-            contactNumber: "8271212908"
-          },
-          comment: "Nice tweet",
-          tag: "",
-          createdAt: new Date()
-        }
-      ],
-      tag: "",
-      tweetId: "001"
-    }
-
+  constructor(private logger: LogService, private apiService: ApiService, private authService: AuthService) {
+    this.tweetDataList = [];
   }
 
   ngOnInit(): void {
+
+    this.apiService.searchUsers(this.authService.getUsername())
+      .subscribe((user) => {
+          this.user = user.users[0]
+        },
+        (error) => {
+          this.logger.log(error)
+        });
+
+    this.apiService.getAllTweets()
+      .subscribe(
+        (success) => {
+          this.logger.log(success)
+          this.tweetDataList = success;
+        }, (error) => {
+          this.logger.log(error)
+        })
+
   }
 
 }

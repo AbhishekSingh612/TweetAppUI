@@ -1,7 +1,17 @@
 <div class="container-sm p-5 pb-0 mx-820">
 
-  <div class="container-fluid text-center display-5 p-2">
+  <div class="container-fluid text-center display-5 p-2 mb-2">
     Register
+  </div>
+
+  <div *ngIf="isSuccess" class="alert alert-success alert-dismissible fade show" role="alert">
+    User successfully registered!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div *ngIf="isFailed" class="alert alert-danger alert-dismissible fade show" role="alert">
+    Failed to register user!
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -84,7 +94,6 @@
         <div class="input-group has-validation pb-4">
           <input type="password" class="form-control"
                  [ngClass]="{'is-invalid' : registerForm.get('password')?.touched && !registerForm.get('password')?.valid}"
-                 (change)="createCompareValidator()"
                  name="email" id="password" formControlName="password" placeholder="Enter your password">
           <div class="invalid-feedback">
             Please provide a password.
@@ -96,8 +105,7 @@
         <label class="form-label" for="confirmPassword">Confirm Password</label> <br>
         <div class="input-group has-validation pb-4">
           <input type="text" class="form-control"
-                 [ngClass]="{'is-invalid' : this.registerForm.get('confirmPassword')?.touched && !isMatching}"
-                 (change)="createCompareValidator()"
+                 [ngClass]="{'is-invalid' : this.registerForm.get('confirmPassword')?.touched && registerForm.hasError('passwordMismatch')}"
                  name="email" id="confirmPassword" formControlName="confirmPassword" placeholder="Enter your password">
           <div class="invalid-feedback">
             Password does not match.

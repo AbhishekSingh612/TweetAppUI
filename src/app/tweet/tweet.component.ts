@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LogService} from "../service/log.service";
-import {AuthService} from "../service/auth.service";
 import {ApiService} from "../service/api.service";
 import {TweetModel} from "../model/tweet.model";
+import {UserModel} from "../model/user.model";
 
 @Component({
   selector: 'app-tweet',
@@ -12,9 +12,12 @@ import {TweetModel} from "../model/tweet.model";
 })
 export class TweetComponent implements OnInit {
   @Input() tweet?: TweetModel;
+  isCurrentUserTweet?: boolean;
+  @Input() user?: UserModel;
   commentForm: FormGroup;
   isCommentVisible: boolean = false;
   isLiked: boolean = false;
+  isHidden: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private logger: LogService, private apiService: ApiService) {
     this.commentForm = formBuilder.group({
@@ -23,8 +26,8 @@ export class TweetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
+    this.isCurrentUserTweet = this.user?.userId === this.tweet?.author?.userId || this.user?.email === this.tweet?.author?.email;
+    this.checkLike();
   }
 
   onComment() {
@@ -36,13 +39,25 @@ export class TweetComponent implements OnInit {
   }
 
   toggleLike() {
-    this.isLiked = !this.isLiked;
-    if (this.isLiked) {
-      this.tweet?.likedBy.push("username");
-    }
-    else {
-      this.tweet?.likedBy.pop();
+    this.apiService.likeTweet(this.tweet?.tweetId, this.user?.userId)
+      .subscribe((success) => {
+          this.tweet = success;
+          this.checkLike();
+        },
+        (error) => {
+          this.logger.log(error)
+        })
+  }
+
+  private checkLike() {
+    if (this.user != null && this.tweet?.likedBy.includes(this.user.userId)) {
+      this.isLiked = true;
+    } else {
+      this.isLiked = false;
     }
   }
 
+  hideTweet() {
+    this.isHidden = true;
+  }
 }

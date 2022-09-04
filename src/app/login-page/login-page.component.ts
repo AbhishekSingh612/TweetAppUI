@@ -38,8 +38,9 @@ export class LoginPageComponent implements OnInit {
           this.isFailed = false;
           this.router.navigate(['home']);
         },
-        () => {
+        (error) => {
           this.logger.log("error in login");
+          this.logger.log(error);
           this.isFailed = true;
         });
 

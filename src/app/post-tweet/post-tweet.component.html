@@ -1,0 +1,37 @@
+<div class="container-fluid card p-0 shadow mb-3">
+
+  <div class="d-flex justify-content-between p-2 px-3">
+
+    <!--Image and name-->
+    <div class="d-flex flex-row align-items-center gap-2">
+
+      <!--Image-->
+      <div class="col-3 col-sm-3 col-md-2">
+        <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
+      </div>
+
+      <!--Name and username-->
+      <div class="flex-shrink-1 col-9 col-sm-9 col-md-10">
+        <div class="d-flex flex-column ml-2"><span
+          class="font-weight-bold">{{user?.firstName+" "+user?.lastName}}</span> <small
+          class="text-primary">{{ user?.userId }}</small>
+        </div>
+      </div>
+    </div>
+    <!--Image and name Ends-->
+  </div>
+
+  <form [formGroup]="postTweetForm" (ngSubmit)="onPost()">
+    <div class="row card-body p-3 me-2 ms-1">
+        <textarea class="form-control" name="tweetTextArea" id="tweetTextArea" rows="5"
+                  placeholder="What's happening?"></textarea>
+    </div>
+    <div class="row card-footer justify-content-end g-0">
+      <div class="col flex-grow-0">
+        <button class="btn btn-primary" [disabled]="!postTweetForm.valid">Post</button>
+      </div>
+    </div>
+  </form>
+
+</div>
+
