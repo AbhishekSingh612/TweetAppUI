@@ -1,12 +1,11 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {LogService} from "./service/log.service";
 
 @Pipe({
   name: 'timeConvert'
 })
 export class TimeConvertPipe implements PipeTransform {
 
-  constructor(private logger: LogService) {
+  constructor() {
   }
 
   response = [

@@ -3,7 +3,7 @@ import {ApiService} from "./api.service";
 import {shareReplay, tap} from "rxjs/operators";
 import {LogService} from "./log.service";
 import {JwtTokenResponseModel} from "../model/JwtTokenResponse.model";
-import {UserModel} from "../model/user.model";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,10 @@ export class AuthService {
 
   username:string | undefined;
 
-  constructor(private apiService : ApiService, private logger : LogService) {
+  isUserLogged$ = new BehaviorSubject<boolean>(false);
 
+  constructor(private apiService : ApiService, private logger : LogService) {
+    this.isUserLogged$.next(this.isLoggedIn());
   }
 
   login(username:string , password:string){
@@ -24,16 +26,18 @@ export class AuthService {
   }
 
   private setSession(response: JwtTokenResponseModel) {
-    this.logger.log("Setting token as : "+response.token);
+    this.logger.log("Setting token response : "+response);
     localStorage.setItem('token', response.token);
     localStorage.setItem("expiryDateMs", String(response.expiryDateMs));
     localStorage.setItem("username",String( response.user));
+    this.isUserLogged$.next(this.isLoggedIn());
   }
 
   logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("expiryDateMs");
     localStorage.removeItem("username");
+    this.isUserLogged$.next(this.isLoggedIn());
   }
 
   public isLoggedIn() {
@@ -51,7 +55,9 @@ export class AuthService {
   }
 
   getUsername(){
-    return String(localStorage.getItem("username"));
+    let s = String(localStorage.getItem("username"));
+    this.logger.log("user from local storage : "+s)
+    return s;
   }
 
 }

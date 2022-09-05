@@ -3,7 +3,7 @@
 
   <app-post-tweet [user]="user" ></app-post-tweet>
 
-  <div *ngFor="let tweetData of tweetDataList;">
-    <app-tweet [tweet]="tweetData" [user]="user"></app-tweet>
+  <div *ngFor="let tweetData of tweetDataList.reverse();">
+    <app-tweet [tweet]="tweetData"></app-tweet>
   </div>
 </div>

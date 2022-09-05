@@ -30,6 +30,13 @@
   box-shadow: 0 0 0 0 rgba(0, 123, 255, 0) !important;
 }
 
+.image-container{
+  width: 48px;
+}
+
+.profile-image-mw{
+  min-width: 48px;
+}
 
 
 

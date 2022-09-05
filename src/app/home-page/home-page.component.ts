@@ -4,6 +4,7 @@ import {LogService} from "../service/log.service";
 import {ApiService} from "../service/api.service";
 import {AuthService} from "../service/auth.service";
 import {UserModel} from "../model/user.model";
+import {CommonService} from "../service/common.service";
 
 @Component({
   selector: 'app-home-page',
@@ -13,30 +14,33 @@ import {UserModel} from "../model/user.model";
 export class HomePageComponent implements OnInit {
 
   tweetDataList: TweetModel[];
-  user: UserModel | undefined;
+  user?: UserModel;
 
-  constructor(private logger: LogService, private apiService: ApiService, private authService: AuthService) {
+  constructor(private logger: LogService, private apiService: ApiService,
+              private authService: AuthService, private common: CommonService) {
     this.tweetDataList = [];
   }
 
   ngOnInit(): void {
 
-    this.apiService.searchUsers(this.authService.getUsername())
+    this.apiService.getCurrentUserDetails()
       .subscribe((user) => {
-          this.user = user.users[0]
+          this.logger.log("Current user detail ");
+          this.logger.log(user);
+          this.user = user;
         },
         (error) => {
           this.logger.log(error)
         });
 
-    this.apiService.getAllTweets()
+    this.common.tweetDataList$
       .subscribe(
         (success) => {
           this.logger.log(success)
           this.tweetDataList = success;
         }, (error) => {
           this.logger.log(error)
-        })
+        });
 
   }
 

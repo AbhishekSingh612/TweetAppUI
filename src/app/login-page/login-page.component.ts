@@ -25,6 +25,9 @@ export class LoginPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.router.url.includes('logout') && this.authService.isLoggedIn()){
+      this.authService.logout();
+    }
   }
 
   onSubmit() {

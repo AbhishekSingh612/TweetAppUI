@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {shareReplay, tap} from "rxjs/operators";
+import {shareReplay} from "rxjs/operators";
 import {LogService} from "./log.service";
 import {RegisterUserModel} from "../model/register-user.model";
 import {UserListModel} from "../model/users.model";
 import {JwtTokenResponseModel} from "../model/JwtTokenResponse.model";
 import {TweetModel} from "../model/tweet.model";
+import {UserModel} from "../model/user.model";
 
 
 @Injectable({
@@ -40,6 +41,7 @@ export class ApiService {
   }
 
   searchUsers(username: string | undefined): Observable<UserListModel> {
+    this.logger.log(username);
     return this.http.get<UserListModel>(this.BASE_URL + "user/search/" + username)
       .pipe(shareReplay());
   }
@@ -48,7 +50,7 @@ export class ApiService {
     return this.http.post<TweetModel>(this.BASE_URL + username + "/add", {content: content, tag: tag});
   }
 
-  updateTweet(id: string, content: string, tag: string | null, username: string): Observable<TweetModel> {
+  updateTweet(id: string | undefined, content: string, tag: string | null, username: string | undefined): Observable<TweetModel> {
     return this.http.put<TweetModel>(this.BASE_URL + username + "/update/" + id, {content: content, tag: tag});
   }
 
@@ -60,7 +62,7 @@ export class ApiService {
     return this.http.put<TweetModel>(this.BASE_URL + username + "/like/" + id, {});
   }
 
-  replyTweet(id: string, username: string, reply: string, tag: string): Observable<TweetModel> {
+  replyTweet(id: string | undefined, username: string | undefined, reply: string, tag: any): Observable<TweetModel> {
     return this.http.post<TweetModel>(this.BASE_URL + username + "/reply/" + id, {reply: reply, tag: tag});
   }
 
@@ -70,6 +72,11 @@ export class ApiService {
 
   getAllUserTweets(username: string): Observable<TweetModel[]> {
     return this.http.get<TweetModel[]>(this.BASE_URL + username);
+  }
+
+  getCurrentUserDetails(){
+    return this.http.get<UserModel>(this.BASE_URL + "user/currentUserDetail")
+      .pipe(shareReplay());
   }
 
 }

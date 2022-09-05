@@ -7,15 +7,17 @@
     <div class="d-flex flex-row align-items-center gap-2">
 
       <!--Image-->
-      <div class="col-3 col-sm-3 col-md-2">
-        <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
+      <div class="image-container col-3 col-sm-3 col-md-2">
+        <img src="/assets/default.jpg" class="profile-image-mw img-fluid img-thumbnail rounded-circle" alt="...">
       </div>
 
       <!--Name and username-->
       <div class="flex-shrink-1 col-9 col-sm-9 col-md-10">
-        <div class="d-flex flex-column ml-2"><span
-          class="font-weight-bold">{{ tweet?.author?.firstName + " " + tweet?.author?.lastName}}</span> <small
-          class="text-primary">{{tweet?.author?.userId}}</small>
+        <div class="d-flex flex-column ml-2">
+          <span class="">
+          {{ tweet?.author?.firstName + " " + tweet?.author?.lastName}}
+        </span> <small
+          class="text-primary">@{{tweet?.author?.userId}}</small>
         </div>
       </div>
     </div>
@@ -28,13 +30,15 @@
       <small class="flex-shrink-0 mr-2 text-muted " style="font-size:0.8rem;">{{tweet?.createdAt | timeConvert}}</small>
 
       <!--Options for own tweet-->
-      <div  class="dropdown">
+      <div class="dropdown">
         <button type="button" class="btn dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"><i
           class="bi bi-three-dots-vertical"></i></button>
 
         <ul class="dropdown-menu">
-          <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editTweetModal">Edit</a></li>
-          <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteTweetModal">Delete</a></li>
+          <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal"
+                 data-bs-target="#editTweetModal">Edit</a></li>
+          <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal"
+                 [attr.data-bs-target]="'#deleteTweetModal'+tweet?.tweetId">Delete</a></li>
           <li><a class="dropdown-item" (click)="hideTweet()">Hide</a></li>
         </ul>
       </div>
@@ -83,33 +87,57 @@
       Comments
     </div>
 
-    <form [formGroup]="commentForm" (ngSubmit)="onComment()" autocomplete="off">
-
-      <div class="row d-flex gap-1 justify-content-center">
-        <div class="col-12 col-md-8">
-          <div class="input-group has-validation pb-2">
-            <input type="text" class="form-control"
-                   [ngClass]="{'is-invalid' : commentForm.get('comment')?.touched && !commentForm.get('comment')?.valid}"
-                   name="postComment" id="postComment" formControlName="comment" placeholder="Enter your comment">
-            <div class="invalid-feedback">
-              Max 144 characters allowed in a comment.
-            </div>
-          </div>
+    <!--List of comments-->
+    <div *ngFor="let reply of tweet?.replies" class="col-12">
+      <div class="d-flex flex-row m-2 align-items-center">
+        <div class="image-container flex-shrink-0">
+          <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
         </div>
-        <div class="col-12 col-md-3 text-center ">
-          <button type="submit" class="btn btn-primary"
-                  [disabled]="!commentForm.valid || commentForm.controls['comment'].value.length==0">Comment
-          </button>
+        <div class="flex-grow-1 m-2 mt-0">
+          <div class="d-flex flex-row justify-content-between">
+            <span>
+              {{ reply?.user?.firstName + " " + reply?.user?.lastName }}
+            </span>
+            <small class="text-muted">
+              {{ reply.createdAt | timeConvert }}
+            </small>
+
+          </div>
+          <div class="flex-row text-muted">{{reply?.comment}}</div>
         </div>
       </div>
+    </div>
+    <div class="col-12">
+      <form [formGroup]="commentForm" (ngSubmit)="onComment()" autocomplete="off">
+
+        <div class="row d-flex gap-1 justify-content-center">
+          <div class="col-12 col-md-8">
+            <div class="input-group has-validation pb-2">
+              <input type="text" class="form-control"
+                     [ngClass]="{'is-invalid' : commentForm.get('comment')?.touched && !commentForm.get('comment')?.valid}"
+                     name="postComment" id="postComment" formControlName="comment" placeholder="Enter your comment">
+              <div class="invalid-feedback">
+                Max 144 characters allowed in a comment.
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-3 text-center ">
+            <button type="submit" class="btn btn-primary"
+                    [disabled]="!commentForm.valid || commentForm.controls['comment'].value?.length==0">Comment
+            </button>
+          </div>
+        </div>
 
 
-    </form>
+      </form>
+    </div>
+
 
   </div>
 
   <!--Delete tweet confirmation model-->
-  <div class="modal fade" id="deleteTweetModal" tabindex="-1" aria-labelledby="deleteTweetModalLabel"
+  <div class="modal fade" id="{{'deleteTweetModal'+tweet?.tweetId}}" tabindex="-1"
+       aria-labelledby="deleteTweetModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -125,7 +153,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-danger">Delete</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="onDelete()">Delete</button>
         </div>
       </div>
     </div>
@@ -140,14 +168,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
-        <div class="modal-body">
-          <textarea class="form-control" id="textarea" maxlength="145" name="textarea"
+        <form [formGroup]="updateForm">
+          <div class="modal-body">
+          <textarea class="form-control" formControlName="content" id="textarea" maxlength="145" name="textarea"
                     rows="10">{{tweet?.content}}</textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-success">Update</button>
-        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal" (click)="onUpdate()"
+                    [disabled]="!updateForm.valid">Update
+            </button>
+          </div>
+        </form>
+
 
       </div>
     </div>

@@ -15,7 +15,8 @@ import { TweetComponent } from './tweet/tweet.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { PostTweetComponent } from './post-tweet/post-tweet.component';
 import {AuthInterceptorService} from "./service/auth-interceptor.service";
-import { TimeConvertPipe } from './time-convert.pipe';
+import { TimeConvertPipe } from './pipe/time-convert.pipe';
+import { ProfilePageComponent } from './profile-page/profile-page.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { TimeConvertPipe } from './time-convert.pipe';
     TweetComponent,
     HomePageComponent,
     PostTweetComponent,
-    TimeConvertPipe
+    TimeConvertPipe,
+    ProfilePageComponent
   ],
   imports: [
     BrowserModule,

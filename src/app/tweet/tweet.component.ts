@@ -4,6 +4,7 @@ import {LogService} from "../service/log.service";
 import {ApiService} from "../service/api.service";
 import {TweetModel} from "../model/tweet.model";
 import {UserModel} from "../model/user.model";
+import {CommonService} from "../service/common.service";
 
 @Component({
   selector: 'app-tweet',
@@ -13,25 +14,57 @@ import {UserModel} from "../model/user.model";
 export class TweetComponent implements OnInit {
   @Input() tweet?: TweetModel;
   isCurrentUserTweet?: boolean;
-  @Input() user?: UserModel;
+  user?: UserModel;
   commentForm: FormGroup;
   isCommentVisible: boolean = false;
-  isLiked: boolean = false;
+  isLiked: boolean = true;
   isHidden: boolean = false;
+  updateForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private logger: LogService, private apiService: ApiService) {
+  constructor(private formBuilder: FormBuilder, private logger: LogService, private apiService: ApiService, private common: CommonService) {
     this.commentForm = formBuilder.group({
       comment: ['', [Validators.maxLength(144)]]
+    });
+
+    this.updateForm = formBuilder.group({
+      content: ['', [Validators.maxLength(144)]]
     });
   }
 
   ngOnInit(): void {
+
+    this.apiService.getCurrentUserDetails()
+      .subscribe((user) => {
+          this.user = user;
+          this.checkLike();
+          this.isCurrentUserTweetComponent();
+        },
+        (error) => {
+          this.logger.log(error)
+        });
+
+
+
+    this.updateForm = this.formBuilder.group({
+      content: [this.tweet?.content, [Validators.maxLength(144)]]
+    });
+
+
+  }
+
+  private isCurrentUserTweetComponent() {
     this.isCurrentUserTweet = this.user?.userId === this.tweet?.author?.userId || this.user?.email === this.tweet?.author?.email;
-    this.checkLike();
   }
 
   onComment() {
     this.logger.log(this.commentForm.value);
+    this.apiService.replyTweet(this.tweet?.tweetId, this.user?.userId, this.commentForm.controls['comment'].value, null)
+      .subscribe((tweet) => {
+        if (this.tweet != null) {
+          this.tweet.replies = tweet.replies;
+        }
+        this.commentForm.reset();
+      }, error => this.logger.log(error));
   }
 
   toggleComments() {
@@ -50,14 +83,19 @@ export class TweetComponent implements OnInit {
   }
 
   private checkLike() {
-    if (this.user != null && this.tweet?.likedBy.includes(this.user.userId)) {
-      this.isLiked = true;
-    } else {
-      this.isLiked = false;
-    }
+    this.logger.log({'user' :this.user, 'likes': this.tweet?.likedBy})
+    this.isLiked = this.user != null && this.tweet!=null && this.tweet.likedBy.includes(this.user.userId);
   }
 
   hideTweet() {
     this.isHidden = true;
+  }
+
+  onDelete() {
+    this.common.deleteTweet(this.tweet?.tweetId, this.user?.userId);
+  }
+
+  onUpdate() {
+    this.common.updateTweet(this.tweet?.tweetId, this.updateForm.controls['content'].value, null, this.user?.userId);
   }
 }
