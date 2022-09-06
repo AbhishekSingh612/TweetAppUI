@@ -7,16 +7,27 @@
       </span>
     </a>
 
-    <div *ngIf="isUserLoggedIn"  class="flex-grow-1">
+    <div *ngIf="isUserLoggedIn" class="flex-grow-1">
       <div class="search-container">
         <form [formGroup]="searchForm" class="" autocomplete="off">
           <div class="dropdown">
             <input formControlName="value" class="form-control me-2 dropdown-toggle" id="dropdownMenuButton1"
                    data-bs-toggle="dropdown"
                    aria-expanded="false" type="text" placeholder="Search" aria-label="Search" #search>
-            <ul class="dropdown-menu w-100" [ngClass]="{'visually-hidden' : userList.length===0}" aria-labelledby="dropdownMenuButton1">
+            <ul class="dropdown-menu w-100" [ngClass]="{'visually-hidden' : userList.length===0}"
+                aria-labelledby="dropdownMenuButton1">
               <li *ngFor="let user of userList">
-                <a class="dropdown-item" [routerLink]="['profile']" [state]="user" >{{user.userId}}</a>
+                <a class="dropdown-item" [routerLink]="['profile',user.userId]">
+                  <div class="d-flex flex-row">
+                    <div class="search-image-container">
+                      <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle"
+                           alt="...">
+                    </div>
+                    <div class="ms-1">
+                      {{user.userId}}
+                    </div>
+                  </div>
+                </a>
               </li>
 
             </ul>
@@ -25,7 +36,7 @@
       </div>
     </div>
 
-    <ul class="navbar-nav">
+    <ul class="navbar-nav ms-1">
 
       <li *ngIf="!isUserLoggedIn" class="nav-item">
         <a class="nav-link" [routerLink]="['login']">Login</a>

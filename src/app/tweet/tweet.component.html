@@ -8,16 +8,20 @@
 
       <!--Image-->
       <div class="image-container col-3 col-sm-3 col-md-2">
-        <img src="/assets/default.jpg" class="profile-image-mw img-fluid img-thumbnail rounded-circle" alt="...">
+        <a class="text-decoration-none" [routerLink]="['/profile',tweet?.author?.userId]">
+          <img src="/assets/default.jpg" class="profile-image-mw img-fluid img-thumbnail rounded-circle" alt="...">
+        </a>
       </div>
 
       <!--Name and username-->
       <div class="flex-shrink-1 col-9 col-sm-9 col-md-10">
         <div class="d-flex flex-column ml-2">
-          <span class="">
-          {{ tweet?.author?.firstName + " " + tweet?.author?.lastName}}
-        </span> <small
-          class="text-primary">@{{tweet?.author?.userId}}</small>
+          <a class="text-decoration-none" [routerLink]="['/profile',tweet?.author?.userId]">
+            <span class="">{{ tweet?.author?.firstName + " " + tweet?.author?.lastName}}</span>
+          </a>
+          <a class="text-decoration-none" [routerLink]="['/profile',tweet?.author?.userId]">
+            <small class="text-primary">@{{tweet?.author?.userId}}</small>
+          </a>
         </div>
       </div>
     </div>
@@ -91,13 +95,17 @@
     <div *ngFor="let reply of tweet?.replies" class="col-12">
       <div class="d-flex flex-row m-2 align-items-center">
         <div class="image-container flex-shrink-0">
+          <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]" >
           <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
+          </a>
         </div>
         <div class="flex-grow-1 m-2 mt-0">
           <div class="d-flex flex-row justify-content-between">
+            <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]" >
             <span>
               {{ reply?.user?.firstName + " " + reply?.user?.lastName }}
             </span>
+            </a>
             <small class="text-muted">
               {{ reply.createdAt | timeConvert }}
             </small>

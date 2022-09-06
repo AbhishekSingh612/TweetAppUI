@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {shareReplay} from "rxjs/operators";
 import {LogService} from "./log.service";
 import {RegisterUserModel} from "../model/register-user.model";
@@ -41,6 +41,10 @@ export class ApiService {
   }
 
   searchUsers(username: string | undefined): Observable<UserListModel> {
+
+    if (username == null || username.length==0)
+      return of({users: []});
+
     this.logger.log(username);
     return this.http.get<UserListModel>(this.BASE_URL + "user/search/" + username)
       .pipe(shareReplay());
@@ -71,7 +75,7 @@ export class ApiService {
   }
 
   getAllUserTweets(username: string): Observable<TweetModel[]> {
-    return this.http.get<TweetModel[]>(this.BASE_URL + username);
+    return this.http.get<TweetModel[]>(this.BASE_URL + username).pipe(shareReplay());
   }
 
   getCurrentUserDetails(){
@@ -79,4 +83,13 @@ export class ApiService {
       .pipe(shareReplay());
   }
 
+  getUserDetails(userid: String){
+    return this.http.get<UserModel>(this.BASE_URL + "user/find/"+userid)
+      .pipe(shareReplay());
+  }
+
+  getUserDetailsWithEmail(email: String){
+    return this.http.get<UserModel>(this.BASE_URL + "user/findEmail/"+email)
+      .pipe(shareReplay());
+  }
 }

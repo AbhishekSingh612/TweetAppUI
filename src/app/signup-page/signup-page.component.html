@@ -18,9 +18,9 @@
 
     <label class="form-label" for="username">Username</label> <br>
     <div class="input-group has-validation pb-4">
-      <input type="text" class="form-control"
+      <input (change)="validateUsername()" type="text" class="form-control"
              [ngClass]="{'is-invalid' :( registerForm.get('userId')?.touched && !registerForm.get('userId')?.valid),
-                          'is-valid' : registerForm.controls['userId'].dirty && registerForm.get('userId')?.valid}"
+                          'is-valid' : registerForm.controls['userId'].dirty && (registerForm.get('userId')?.valid || registerForm.controls['userId'].hasError('userAlreadyExist'))}"
              name="loginUsername" id="username" formControlName="userId"
              placeholder="Enter a username"/>
       <div *ngIf="registerForm.controls['userId'].errors?.required" class="invalid-feedback">
@@ -59,8 +59,9 @@
 
     <label class="form-label" for="email">Email</label> <br>
     <div class="input-group has-validation pb-4">
-      <input type="text" class="form-control"
-             [ngClass]="{'is-invalid' : registerForm.get('email')?.touched && !registerForm.get('email')?.valid}"
+      <input (change)="validateEmail()" type="text" class="form-control"
+             [ngClass]="{'is-invalid' : registerForm.get('email')?.touched && !registerForm.get('email')?.valid,
+                          'is-valid' : registerForm.controls['email'].dirty && (registerForm.get('email')?.valid || registerForm.controls['email'].hasError('emailAlreadyExist'))}"
              name="email" id="email" formControlName="email" placeholder="Enter a valid email">
       <div *ngIf="registerForm.get('email')?.errors?.required" class="invalid-feedback">
         Please provide a email.

@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {LogService} from "../service/log.service";
-import {AuthService} from "../service/auth.service";
 import {ApiService} from "../service/api.service";
 import {RegisterUserModel} from "../model/register-user.model";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-signup-page',
@@ -24,19 +25,20 @@ export class SignupPageComponent implements OnInit {
     this.isSuccess = false;
 
     this.registerForm = formBuilder.group({
-      userId: ['', [this.checkUsername, Validators.required]],
+      userId: ['', [Validators.required]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [this.checkEmail, Validators.email, Validators.required]],
+      email: ['', [Validators.email, Validators.required]],
       password: ['', [Validators.required]],
       confirmPassword: [''],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
-    }, {validators: this.passwordMatchValidator});
+    }, {validators: this.passwordMatchValidator, asyncValidators: this.usernameValidator});
   }
 
   ngOnInit(): void {
     this.isFailed = false;
     this.isSuccess = false;
+
   }
 
   onSubmit() {
@@ -67,15 +69,41 @@ export class SignupPageComponent implements OnInit {
 
   }
 
-
-  checkUsername(control: AbstractControl): ValidationErrors | null {
-    let value = control.value;
-    return (value.length == 0 || value !== 'Ankur') ? null : {'userAlreadyExist': true};
-  }
-
   checkEmail(control: AbstractControl): ValidationErrors | null {
     let value = control.value;
     return (value.length == 0 || value !== 'Ankur@gmail.com') ? null : {'emailAlreadyExist': true};
+  }
+
+  usernameValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      return this.apiService.searchUsers(control.value).pipe(map(res => {
+        return res ? {'userAlreadyExist': true} : null;
+      }))
+    }
+  }
+
+  validateUsername() {
+    let control = this.registerForm.controls['userId'];
+    if (control.value.length != 0) {
+      this.apiService.getUserDetails(control.value).subscribe(
+        data => {
+          this.logger.log(data);
+          (data) ? control.setErrors({'userAlreadyExist': true}) : control.setErrors(null);
+        }, () => control.setErrors(null));
+    } else
+      control.setErrors({'required': true});
+  }
+
+  validateEmail() {
+    let control = this.registerForm.controls['email'];
+    if (control.value.length != 0) {
+      this.apiService.getUserDetailsWithEmail(control.value).subscribe(
+        data => {
+          this.logger.log(data);
+          (data) ? control.setErrors({'emailAlreadyExist': true}) : control.setErrors(null);
+        }, () => control.setErrors(null));
+    } else
+      control.setErrors({'required': true});
   }
 
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {

@@ -34,11 +34,17 @@
   width: 48px;
 }
 
+.search-image-container{
+  width: 30px;
+}
+
 .profile-image-mw{
   min-width: 48px;
 }
 
-
+.profile-page-image-mw{
+  max-width: 150px;
+}
 
 
 
