@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators} from "@angular/forms";
 import {LogService} from "../service/log.service";
 import {ApiService} from "../service/api.service";
 import {RegisterUserModel} from "../model/register-user.model";
-import {Observable} from "rxjs";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-signup-page',

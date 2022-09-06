@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
 
   isUserLoggedIn :boolean = false;
 
+  isSearching: boolean = false;
+
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private apiService: ApiService, private logger: LogService) {
 
     this.searchForm = formBuilder.group({
@@ -50,6 +52,10 @@ export class AppComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  toggleSearch(){
+    this.isSearching = !this.isSearching;
   }
 
 }

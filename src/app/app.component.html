@@ -1,13 +1,13 @@
 <nav class="navbar navbar-expand-sm navbar-light nav-shadow">
   <div class="container mx-975">
 
-    <a class="navbar-brand" [routerLink]="['/']">
+    <a *ngIf="!isSearching" class="navbar-brand" [routerLink]="['/']">
       <span class="container-fluid">
         <img src="/assets/logo-t2.png" alt="" height="29" width="97">
       </span>
     </a>
 
-    <div *ngIf="isUserLoggedIn" class="flex-grow-1">
+    <div *ngIf="isUserLoggedIn && isSearching" class="flex-grow-1">
       <div class="search-container">
         <form [formGroup]="searchForm" class="" autocomplete="off">
           <div class="dropdown">
@@ -36,7 +36,13 @@
       </div>
     </div>
 
-    <ul class="navbar-nav ms-1">
+
+    <ul class="navbar-nav flex-row gap-1 ms-1">
+
+      <li *ngIf="isUserLoggedIn" class="nav-item">
+        <a class="nav-link" *ngIf="!isSearching" (click)="toggleSearch()"><i class="bi bi-search"></i></a>
+        <a class="nav-link" *ngIf="isSearching"  (click)="toggleSearch()">Cancel</a>
+      </li>
 
       <li *ngIf="!isUserLoggedIn" class="nav-item">
         <a class="nav-link" [routerLink]="['login']">Login</a>
@@ -44,7 +50,7 @@
       <li *ngIf="!isUserLoggedIn" class="nav-item">
         <a class="nav-link" [routerLink]="['register']">Register</a>
       </li>
-      <li *ngIf="isUserLoggedIn" class="nav-item">
+      <li *ngIf="isUserLoggedIn && !isSearching" class="nav-item">
         <a class="nav-link" [routerLink]="['logout']" (click)="logout()">Logout</a>
       </li>
     </ul>
@@ -53,7 +59,7 @@
 </nav>
 
 <main>
-  <div class="container p-0 p-sm-1 justify-content-center">
+  <div class="container p-0 p-sm-1 pt-1 justify-content-center">
     <router-outlet></router-outlet>
   </div>
 </main>
