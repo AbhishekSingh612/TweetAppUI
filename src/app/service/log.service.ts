@@ -8,7 +8,7 @@ export class LogService {
   canLog : boolean;
 
   constructor() {
-    this.canLog = true;
+    this.canLog = false;
   }
 
   log(content : any){
