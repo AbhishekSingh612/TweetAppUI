@@ -46,7 +46,41 @@
   max-width: 150px;
 }
 
+.blur-ui{
 
+}
+
+.navbar{
+  z-index: 2;
+}
+
+.overlay-screen{
+  z-index: 1;
+  height: 90vh;
+  width: 100vw;
+  background-color: rgba(7,7,14,0.71);
+  top: 0;
+  left: 0;
+}
+
+.likeAnimation:active{
+  animation: pulse-animation 2s cubic-bezier(0.48, 0, 0.76, 1) forwards;
+}
+
+@keyframes pulse-animation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5);
+  }
+}
 
 
 

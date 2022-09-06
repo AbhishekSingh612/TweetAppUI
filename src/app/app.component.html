@@ -3,7 +3,7 @@
 
     <a *ngIf="!isSearching" class="navbar-brand" [routerLink]="['/']">
       <span class="container-fluid">
-        <img src="/assets/logo-t2.png" alt="" height="29" width="97">
+        <img src="/assets/logo-5.png" alt="" height="32" >
       </span>
     </a>
 
@@ -17,7 +17,7 @@
             <ul class="dropdown-menu w-100" [ngClass]="{'visually-hidden' : userList.length===0}"
                 aria-labelledby="dropdownMenuButton1">
               <li *ngFor="let user of userList">
-                <a class="dropdown-item" [routerLink]="['profile',user.userId]">
+                <a class="dropdown-item" [routerLink]="['profile',user.userId]" (click)="toggleSearch()">
                   <div class="d-flex flex-row">
                     <div class="search-image-container">
                       <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle"
@@ -58,8 +58,10 @@
   </div>
 </nav>
 
-<main>
+<main [ngClass]="{'visually-hidden': isSearching}">
   <div class="container p-0 p-sm-1 pt-1 justify-content-center">
     <router-outlet></router-outlet>
   </div>
 </main>
+
+<div *ngIf="isSearching" class="overlay-screen"></div>

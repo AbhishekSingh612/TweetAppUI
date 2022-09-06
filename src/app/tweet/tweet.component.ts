@@ -23,11 +23,11 @@ export class TweetComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private logger: LogService, private apiService: ApiService, private common: CommonService) {
     this.commentForm = formBuilder.group({
-      comment: ['', [Validators.maxLength(144)]]
+      comment: ['', [Validators.maxLength(144), Validators.required]]
     });
 
     this.updateForm = formBuilder.group({
-      content: ['', [Validators.maxLength(144)]]
+      content: ['', [Validators.maxLength(144), Validators.required]]
     });
   }
 
@@ -42,7 +42,6 @@ export class TweetComponent implements OnInit {
         (error) => {
           this.logger.log(error)
         });
-
 
 
     this.updateForm = this.formBuilder.group({
@@ -63,7 +62,7 @@ export class TweetComponent implements OnInit {
         if (this.tweet != null) {
           this.tweet.replies = tweet.replies;
         }
-        this.commentForm.reset();
+        this.commentForm.reset({content: ""});
       }, error => this.logger.log(error));
   }
 
@@ -83,8 +82,8 @@ export class TweetComponent implements OnInit {
   }
 
   private checkLike() {
-    this.logger.log({'user' :this.user, 'likes': this.tweet?.likedBy})
-    this.isLiked = this.user != null && this.tweet!=null && this.tweet.likedBy.includes(this.user.userId);
+    this.logger.log({'user': this.user, 'likes': this.tweet?.likedBy})
+    this.isLiked = this.user != null && this.tweet != null && this.tweet.likedBy.includes(this.user.userId);
   }
 
   hideTweet() {

@@ -44,4 +44,7 @@ export class HomePageComponent implements OnInit {
 
   }
 
+  trackByFn(index:any , item:TweetModel) {
+    return item.tweetId;
+  }
 }
