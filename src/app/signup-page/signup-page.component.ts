@@ -32,7 +32,7 @@ export class SignupPageComponent implements OnInit {
       password: ['', [Validators.required]],
       confirmPassword: [''],
       contactNumber: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
-    }, {validators: this.passwordMatchValidator, asyncValidators: this.usernameValidator});
+    }, {validators: this.passwordMatchValidator});
   }
 
   ngOnInit(): void {
@@ -74,13 +74,13 @@ export class SignupPageComponent implements OnInit {
     return (value.length == 0 || value !== 'Ankur@gmail.com') ? null : {'emailAlreadyExist': true};
   }
 
-  usernameValidator(): AsyncValidatorFn {
+/*  usernameValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       return this.apiService.searchUsers(control.value).pipe(map(res => {
         return res ? {'userAlreadyExist': true} : null;
       }))
     }
-  }
+  }*/
 
   validateUsername() {
     let control = this.registerForm.controls['userId'];
