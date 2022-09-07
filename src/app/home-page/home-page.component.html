@@ -1,7 +1,15 @@
 <div class="container-sm p-lg-5 pt-5 mx-820">
   <p class="lead text-center">Welcome!</p>
 
-  <app-post-tweet [user]="user" ></app-post-tweet>
+  <app-post-tweet [user]="user"></app-post-tweet>
+
+
+  <div *ngIf="this.tweetDataList.length==0"
+       class="d-flex p-0 mt-5 text-muted  mb-3 align-items-center justify-content-center  flex-grow-1">
+    <div class="fs-5 text-center">
+      No tweets to show!
+    </div>
+  </div>
 
   <div *ngFor="let tweetData of sortedList();index as i ;trackBy: trackByFn;">
     <app-tweet [tweet]="tweetData"></app-tweet>
