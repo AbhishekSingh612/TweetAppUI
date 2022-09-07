@@ -44,7 +44,12 @@ export class HomePageComponent implements OnInit {
 
   }
 
-  trackByFn(index:any , item:TweetModel) {
+  trackByFn(index: any, item: TweetModel) {
     return item.tweetId;
+  }
+
+  sortedList() {
+    return this.tweetDataList.sort(
+      (a, b) => (a.createdAt < b.createdAt) ? 1 : (a.createdAt == b.createdAt) ? 0 : -1);
   }
 }

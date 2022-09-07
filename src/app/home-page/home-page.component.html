@@ -3,7 +3,7 @@
 
   <app-post-tweet [user]="user" ></app-post-tweet>
 
-  <div *ngFor="let tweetData of tweetDataList.reverse();index as i ; trackBy: trackByFn">
+  <div *ngFor="let tweetData of sortedList();index as i ;trackBy: trackByFn;">
     <app-tweet [tweet]="tweetData"></app-tweet>
   </div>
 </div>
