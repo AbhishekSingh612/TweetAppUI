@@ -16,13 +16,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   routeSub: any;
   user!: UserModel;
   tweets: TweetModel[] = [];
+  isLoading: boolean;
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private logger: LogService, private apiService: ApiService) {
     this.userid = '';
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
-
+    this.isLoading = true;
     this.routeSub = this.activatedRoute.paramMap.subscribe(params => {
 
       this.userid = params.get('id')!;
@@ -37,11 +39,17 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.logger.log(this.userid);
 
     if (this.userid != null && this.userid != '') {
-      this.apiService.getUserDetails(this.userid).subscribe((user) => this.user = user, (error) => {
-        this.logger.log('Get Data');
-        this.logger.log(error);
-        this.router.navigateByUrl('user-not-found');
-      });
+      this.apiService.getUserDetails(this.userid).subscribe(
+        (user) => {
+          this.isLoading = false;
+          this.user = user
+        },
+        (error) => {
+          this.isLoading = false;
+          this.logger.log('Get Data');
+          this.logger.log(error);
+          this.router.navigateByUrl('user-not-found');
+        });
       this.apiService.getAllUserTweets(this.userid).subscribe(tweets => {
         this.tweets = tweets;
         this.logger.log(this.tweets);
@@ -52,6 +60,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routeSub.unsubscribe();
+  }
+
+  trackByFn(index: any, item: TweetModel) {
+    return item.tweetId;
+  }
+
+
+  sortedList() {
+    return this.tweets.sort(
+      (a, b) => (a.createdAt < b.createdAt) ? 1 : (a.createdAt == b.createdAt) ? 0 : -1);
   }
 
 }

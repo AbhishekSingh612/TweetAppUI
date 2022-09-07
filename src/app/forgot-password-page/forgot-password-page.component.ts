@@ -13,9 +13,11 @@ export class ForgotPasswordPageComponent implements OnInit {
   forgotPasswordForm: FormGroup;
   isSuccess: boolean = false;
   isFailed: boolean = false;
+  isLoading: boolean = false;
   isUsernameInvalid: boolean = false;
 
   constructor(private formBuilder: FormBuilder,private apiService: ApiService, private logger: LogService) {
+    this.isLoading = false;
 
     this.forgotPasswordForm = formBuilder.group({
       userId: ['', [Validators.required]],
@@ -28,19 +30,22 @@ export class ForgotPasswordPageComponent implements OnInit {
   ngOnInit(): void {
     this.isFailed = false;
     this.isSuccess = false;
+    this.isLoading = false;
     this.isUsernameInvalid = false;
   }
 
   onSubmit() {
     let value = this.forgotPasswordForm.value;
-
+    this.isLoading = true;
     this.apiService.forgotPassword(value.userId, value.password)
       .subscribe((success)=>{
+        this.isLoading = false;
         this.logger.log("Successfully registered!");
         this.logger.log(success);
         this.isSuccess = true;
         this.resetForm();
       },(error)=>{
+        this.isLoading = false;
         this.logger.log("Error occurred while registering user");
         this.logger.log(error);
 

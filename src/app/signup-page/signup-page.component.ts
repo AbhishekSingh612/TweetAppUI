@@ -14,6 +14,7 @@ export class SignupPageComponent implements OnInit {
   registerForm: FormGroup;
   isFailed: boolean;
   isSuccess: boolean;
+  isLoading: boolean;
 
   constructor(private formBuilder: FormBuilder, private logger: LogService, private apiService: ApiService) {
 
@@ -21,6 +22,7 @@ export class SignupPageComponent implements OnInit {
 
     this.isFailed = false;
     this.isSuccess = false;
+    this.isLoading = false;
 
     this.registerForm = formBuilder.group({
       userId: ['', [Validators.required]],
@@ -52,14 +54,17 @@ export class SignupPageComponent implements OnInit {
       confirmPassword: value.confirmPassword
     }
 
+    this.isLoading = true;
     this.apiService.register(registerRequest)
       .subscribe((success) => {
+          this.isLoading = false;
           this.logger.log(success);
           this.logger.log("successfully registered");
           this.isSuccess = true;
           this.resetForm();
         },
         (error) => {
+          this.isLoading = false;
           this.logger.log(error);
           this.logger.log("error occured while registered");
           this.isFailed = true;
@@ -79,6 +84,7 @@ export class SignupPageComponent implements OnInit {
       }))
     }
   }*/
+
 
   validateUsername() {
     let control = this.registerForm.controls['userId'];

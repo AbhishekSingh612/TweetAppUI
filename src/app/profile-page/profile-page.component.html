@@ -1,7 +1,16 @@
 <div class="container-sm p-lg-5 mx-820 mt-2 d-flex vh-90 flex-column">
 
 
-  <div class="container-fluid card p-0 shadow mb-3">
+  <div *ngIf="isLoading"
+       class="d-flex p-0 mt-5 text-muted  mb-3 align-items-center justify-content-center  flex-grow-1">
+    <div class="fs-5 text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="container-fluid card p-0 shadow mb-3">
 
 
     <div class="d-flex flex-row justify-content-center mb-2 mt-3">
@@ -12,7 +21,7 @@
 
     <div class="d-flex flex-row justify-content-center text-center mb-2">
       <div class="display-5">
-       {{ user?.firstName + " " + user?.lastName}}
+        {{ user?.firstName + " " + user?.lastName}}
       </div>
     </div>
 
@@ -26,15 +35,19 @@
 
   </div>
 
-  <div *ngIf="tweets.length==0" class="d-flex p-0 mt-5 text-muted  mb-3 align-items-center justify-content-center  flex-grow-1">
+  <div *ngIf="!isLoading">
+    <div *ngIf="tweets.length==0"
+         class="d-flex p-0 mt-5 text-muted  mb-3 align-items-center justify-content-center  flex-grow-1">
       <div class="fs-5 text-center">
-       User has no tweets!
+        User has no tweets!
       </div>
-  </div>
+    </div>
 
 
-  <div *ngFor="let tweetData of tweets.reverse();">
-    <app-tweet [tweet]="tweetData"></app-tweet>
+    <div *ngFor="let tweetData of sortedList();index as i ;trackBy: trackByFn;">
+      <app-tweet [tweet]="tweetData"></app-tweet>
+    </div>
   </div>
+
 
 </div>

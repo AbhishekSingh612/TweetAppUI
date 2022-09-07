@@ -12,10 +12,12 @@ import {Router} from "@angular/router";
 export class LoginPageComponent implements OnInit {
   loginForm: FormGroup;
   isFailed: boolean;
+  isLoading: boolean;
 
   constructor(private formBuilder: FormBuilder, private logger: LogService, private authService: AuthService,private router: Router) {
 
     this.isFailed = false;
+    this.isLoading = false;
 
     this.loginForm = formBuilder.group({
       username: ['', [Validators.required]],
@@ -33,17 +35,21 @@ export class LoginPageComponent implements OnInit {
   onSubmit() {
     this.logger.log(this.loginForm.value);
 
+    this.isLoading = true;
+
     let value = this.loginForm.value;
     this.authService.login(value.username, value.password)
       .subscribe(
         (token) => {
           this.logger.log(token);
           this.isFailed = false;
+          this.isLoading = false;
           this.router.navigate(['home']);
         },
         (error) => {
           this.logger.log("error in login");
           this.logger.log(error);
+          this.isLoading = false;
           this.isFailed = true;
         });
 

@@ -1,6 +1,6 @@
 <div class="container-sm p-5 mx-820">
 
-  <div class="container-fluid text-center display-5 p-2 mb-3" >
+  <div class="container-fluid text-center display-5 p-2 mb-3">
     Login
   </div>
 
@@ -8,6 +8,7 @@
     Invalid username or password!
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
+
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
@@ -34,7 +35,15 @@
     <a [routerLink]="['../forgot-password']">Forgot Password?</a>
 
     <div class="container-fluid text-center">
-      <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+      <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">
+        <div *ngIf="!isLoading">
+          Login
+        </div>
+        <div *ngIf="isLoading" class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+
+      </button>
 
     </div>
 

@@ -16,20 +16,34 @@ export class HomePageComponent implements OnInit {
   tweetDataList: TweetModel[];
   user?: UserModel;
 
+  isLoadingPost: boolean;
+  isLoadingTweets: boolean = true;
+
+  isFetching:boolean = true;
+
   constructor(private logger: LogService, private apiService: ApiService,
               private authService: AuthService, private common: CommonService) {
     this.tweetDataList = [];
+    this.isLoadingPost = true;
+    this.isLoadingTweets = true;
+    this.isFetching = true;
   }
 
   ngOnInit(): void {
 
+    this.isLoadingPost = true;
+    this.isLoadingTweets = true;
+    this.isFetching = true;
+
     this.apiService.getCurrentUserDetails()
       .subscribe((user) => {
+          this.isLoadingPost = false;
           this.logger.log("Current user detail ");
           this.logger.log(user);
           this.user = user;
         },
         (error) => {
+          this.isLoadingPost = false;
           this.logger.log(error)
         });
 
@@ -38,9 +52,12 @@ export class HomePageComponent implements OnInit {
         (success) => {
           this.logger.log(success)
           this.tweetDataList = success;
+          this.isFetching = this.common.isFetching;
         }, (error) => {
+          this.isFetching = this.common.isFetching;
           this.logger.log(error)
         });
+
 
   }
 
