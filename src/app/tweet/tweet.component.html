@@ -40,7 +40,7 @@
 
         <ul class="dropdown-menu">
           <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal"
-                 data-bs-target="#editTweetModal">Edit</a></li>
+                 [attr.data-bs-target]="'#editTweetModal'+tweet?.tweetId">Edit</a></li>
           <li><a *ngIf="isCurrentUserTweet" class="dropdown-item" data-bs-toggle="modal"
                  [attr.data-bs-target]="'#deleteTweetModal'+tweet?.tweetId">Delete</a></li>
           <li><a class="dropdown-item" (click)="hideTweet()">Hide</a></li>
@@ -69,7 +69,7 @@
         </span>
       </button>
       <div>
-        {{ tweet?.likedBy?.length }}
+        {{ (tweet?.likedBy == null)? 0 :tweet?.likedBy?.length }}
       </div>
     </div>
 
@@ -95,13 +95,13 @@
     <div *ngFor="let reply of tweet?.replies" class="col-12">
       <div class="d-flex flex-row m-2 align-items-center">
         <div class="image-container flex-shrink-0">
-          <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]" >
-          <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
+          <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]">
+            <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
           </a>
         </div>
         <div class="flex-grow-1 m-2 mt-0">
           <div class="d-flex flex-row justify-content-between">
-            <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]" >
+            <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]">
             <span>
               {{ reply?.user?.firstName + " " + reply?.user?.lastName }}
             </span>
@@ -167,7 +167,7 @@
     </div>
   </div>
 
-  <div class="modal fade pe-0" id="editTweetModal" tabindex="-1" aria-labelledby="editTweetModalLabel"
+  <div class="modal fade pe-0" id="{{'editTweetModal'+tweet?.tweetId}}" tabindex="-1" aria-labelledby="editTweetModalLabel"
        aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">

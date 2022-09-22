@@ -4,6 +4,7 @@ import {LogService} from "../service/log.service";
 import {ApiService} from "../service/api.service";
 import {UserModel} from "../model/user.model";
 import {TweetModel} from "../model/tweet.model";
+import {CommonService} from "../service/common.service";
 
 @Component({
   selector: 'app-profile-page',
@@ -18,12 +19,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   tweets: TweetModel[] = [];
   isLoading: boolean;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private logger: LogService, private apiService: ApiService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private common: CommonService, private logger: LogService, private apiService: ApiService) {
     this.userid = '';
     this.isLoading = true;
+    this.tweets = [];
   }
 
   ngOnInit(): void {
+    this.tweets = [];
     this.isLoading = true;
     this.routeSub = this.activatedRoute.paramMap.subscribe(params => {
 

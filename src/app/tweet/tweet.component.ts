@@ -61,6 +61,7 @@ export class TweetComponent implements OnInit {
       .subscribe((tweet) => {
         if (this.tweet != null) {
           this.tweet.replies = tweet.replies;
+          this.common.replyTweet(this.tweet);
         }
         this.commentForm.reset({content: ""});
       }, error => this.logger.log(error));
@@ -74,16 +75,18 @@ export class TweetComponent implements OnInit {
     this.apiService.likeTweet(this.tweet?.tweetId, this.user?.userId)
       .subscribe((success) => {
           this.tweet = success;
+          this.common.toggleLike(this.tweet, this.user?.userId);
           this.checkLike();
         },
         (error) => {
           this.logger.log(error)
         })
+
   }
 
   private checkLike() {
     this.logger.log({'user': this.user, 'likes': this.tweet?.likedBy})
-    this.isLiked = this.user != null && this.tweet != null && this.tweet.likedBy.includes(this.user.userId);
+    this.isLiked = this.user != null && this.tweet != null && this.tweet.likedBy != null && this.tweet.likedBy.includes(this.user.userId);//todo fix for null likedBy
   }
 
   hideTweet() {
