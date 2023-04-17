@@ -9,7 +9,7 @@
       <!--Image-->
       <div class="image-container col-3 col-sm-3 col-md-2">
         <a class="text-decoration-none" [routerLink]="['/profile',tweet?.author?.userId]">
-          <img src="/assets/default.jpg" class="profile-image-mw img-fluid img-thumbnail rounded-circle" alt="...">
+          <img src="https://api.multiavatar.com/{{tweet?.author?.userId}}.png" class="profile-image-mw img-fluid img-thumbnail rounded-circle" alt="...">
         </a>
       </div>
 
@@ -96,7 +96,7 @@
       <div class="d-flex flex-row m-2 align-items-center">
         <div class="image-container flex-shrink-0">
           <a class="text-decoration-none" [routerLink]="['../profile', reply?.user?.userId]">
-            <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle" alt="...">
+            <img src="https://api.multiavatar.com/{{reply?.user?.userId}}.png" class="img-fluid img-thumbnail rounded-circle" alt="...">
           </a>
         </div>
         <div class="flex-grow-1 m-2 mt-0">

@@ -5,6 +5,7 @@ import {catchError, debounceTime, distinctUntilChanged, filter, switchMap} from 
 import {ApiService} from "./service/api.service";
 import {UserModel} from "./model/user.model";
 import {LogService} from "./service/log.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,9 @@ export class AppComponent implements OnInit {
 
   isSearching: boolean = false;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private apiService: ApiService, private logger: LogService) {
+  constructor(private authService: AuthService, private formBuilder: FormBuilder,
+              private apiService: ApiService, private logger: LogService,
+              private router: Router) {
 
     this.searchForm = formBuilder.group({
       value: ['']
@@ -58,4 +61,12 @@ export class AppComponent implements OnInit {
     this.isSearching = !this.isSearching;
   }
 
+  showLogin(){
+    console.log(this.router.url);
+    return !this.isUserLoggedIn && this.router.url !== '/login';
+  }
+
+  showRegister(){
+    return !this.isUserLoggedIn && this.router.url !== '/register';
+  }
 }

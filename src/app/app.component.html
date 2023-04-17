@@ -3,7 +3,7 @@
 
     <a *ngIf="!isSearching" class="navbar-brand" [routerLink]="['/']">
       <span class="container-fluid">
-        <img src="/assets/logo-5.png" alt="" height="32" >
+        <img src="/assets/yellow.png" alt="" height="32" > TweetApp
       </span>
     </a>
 
@@ -20,7 +20,7 @@
                 <a class="dropdown-item" [routerLink]="['profile',user.userId]" (click)="toggleSearch()">
                   <div class="d-flex flex-row">
                     <div class="search-image-container">
-                      <img src="/assets/default.jpg" class="img-fluid img-thumbnail rounded-circle"
+                      <img src="https://api.multiavatar.com/{{user?.userId}}.png" class="img-fluid img-thumbnail rounded-circle"
                            alt="...">
                     </div>
                     <div class="ms-1">
@@ -44,10 +44,10 @@
         <a class="nav-link" *ngIf="isSearching"  (click)="toggleSearch()">Cancel</a>
       </li>
 
-      <li *ngIf="!isUserLoggedIn" class="nav-item">
+      <li *ngIf="showLogin()" class="nav-item">
         <a class="nav-link" [routerLink]="['login']">Login</a>
       </li>
-      <li *ngIf="!isUserLoggedIn" class="nav-item">
+      <li *ngIf="showRegister()" class="nav-item">
         <a class="nav-link" [routerLink]="['register']">Register</a>
       </li>
       <li *ngIf="isUserLoggedIn && !isSearching" class="nav-item">
