@@ -85,10 +85,31 @@ export class CommonService {
         this.logger.log("update content :" + value);
         let index = this.tweetDataList.findIndex((item) => item.tweetId === tweet.tweetId);
         this.tweetDataList[index] = Object.assign({}, this.tweetDataList[index], {content: tweet.content});
+        this.tweetDataList$.next(this.tweetDataList);
       },
       (error) => {
         this.logger.log(error)
       }
     );
+  }
+
+  toggleLike(tweet: TweetModel | undefined, userId: string | undefined) {
+
+    let tweetId = tweet?.tweetId;
+    this.logger.log("like tweet  :" + tweetId);
+    let index = this.tweetDataList.findIndex((item) => item.tweetId === tweet?.tweetId);
+    this.tweetDataList[index] = Object.assign({}, this.tweetDataList[index], {likedBy: tweet?.likedBy});
+    this.tweetDataList$.next(this.tweetDataList);
+
+  }
+
+  replyTweet(tweet: TweetModel | undefined) {
+
+    let tweetId = tweet?.tweetId;
+    this.logger.log("like tweet  :" + tweetId);
+    let index = this.tweetDataList.findIndex((item) => item.tweetId === tweet?.tweetId);
+    this.tweetDataList[index] = Object.assign({}, this.tweetDataList[index], {replies: tweet?.replies});
+    this.tweetDataList$.next(this.tweetDataList);
+
   }
 }

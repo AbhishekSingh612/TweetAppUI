@@ -23,7 +23,7 @@ export class TimeConvertPipe implements PipeTransform {
       return '';
     }
 
-    let time = new Date().getTime();
+    let time = new Date().getTime()-19800000;
     let valueTime = new Date(value).getTime();
 
     let diffseconds = Math.floor((time - valueTime) / 1000);

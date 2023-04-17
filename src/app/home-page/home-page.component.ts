@@ -30,7 +30,7 @@ export class HomePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.tweetDataList = [];
     this.isLoadingPost = true;
     this.isLoadingTweets = true;
     this.isFetching = true;

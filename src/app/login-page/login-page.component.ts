@@ -30,6 +30,10 @@ export class LoginPageComponent implements OnInit {
     if (this.router.url.includes('logout') && this.authService.isLoggedIn()){
       this.authService.logout();
     }
+
+    if (this.authService.isLoggedIn()){
+      this.router.navigateByUrl('home');
+    }
   }
 
   onSubmit() {
