@@ -15,7 +15,7 @@ import {UserModel} from "../model/user.model";
 })
 export class ApiService {
 
-  BASE_URL: string = "https://tweeetsapp.herokuapp.com/api/v1.0/tweets/";
+  BASE_URL: string = "https://tweet.ankurr.me/api/v1.0/tweets/";
 
   constructor(private http: HttpClient, private logger: LogService) {
   }
